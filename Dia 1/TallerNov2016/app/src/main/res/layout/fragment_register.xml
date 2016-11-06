@@ -27,10 +27,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
@@ -38,12 +34,6 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/et_firstName"
@@ -53,12 +43,6 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
 
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
                 <EditText
                     android:id="@+id/et_lastName"
                     android:layout_width="match_parent"
@@ -66,12 +50,6 @@
                     android:hint="@string/prompt_last_name"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
                 <EditText
                     android:id="@+id/et_password"
@@ -81,11 +59,6 @@
                     android:inputType="textPassword"
                     android:maxLines="1" />
 
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/et_confirmPassword"
@@ -94,8 +67,6 @@
                     android:hint="@string/prompt_confirm_password"
                     android:inputType="textPassword"
                     android:maxLines="1" />
-
-            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/register_button"
@@ -107,18 +78,18 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:id="@+id/textView"
-                    android:text="@string/text_login_from_register"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:text="@string/text_login_from_register" />
 
                 <Button
                     android:id="@+id/login_button"
@@ -126,10 +97,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@string/action_login"
-                    android:textStyle="bold"
                     android:layout_weight="1"
-                    android:background="@android:color/transparent" />
+                    android:background="@android:color/transparent"
+                    android:text="@string/action_login"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
      */
     private void showRegisterScreen() {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(android.R.id.content, new RegisterFragment());
+        transaction.replace(R.id.fragment_container, new RegisterFragment());
         transaction.commit();
     }
 
