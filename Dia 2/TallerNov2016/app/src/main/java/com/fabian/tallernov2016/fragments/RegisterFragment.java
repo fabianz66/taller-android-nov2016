@@ -1,5 +1,6 @@
 package com.fabian.tallernov2016.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -12,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.fabian.tallernov2016.AppContext;
 import com.fabian.tallernov2016.R;
+import com.fabian.tallernov2016.activities.MainActivity;
+import com.fabian.tallernov2016.models.User;
 
 /**
  * Created by fabian on 11/5/16.
@@ -135,8 +139,16 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
-        // Intenta crear la cuenta
-        Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_LONG).show();
+        //Guarda el usuario
+        AppContext context = (AppContext) getActivity().getApplication();
+        context.setUser(new User(email, firstName, lastName));
+
+        //Abre la nueva activity
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+
+        //Cierra la activity actual
+        getActivity().finish();
     }
 
     //endregion
