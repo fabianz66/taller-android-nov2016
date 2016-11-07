@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fabian.tallernov2016.R;
+import com.fabian.tallernov2016.Utils;
 
 /**
  * Ventana que permite al usuario iniciar sesión.
@@ -98,8 +99,8 @@ public class LoginFragment extends Fragment {
         mEditPassword.setError(null);
 
         // Obtiene los valores ingresados por el usuario
-        String email = checkEditTextForEmpty(mEditEmail);
-        String password = checkEditTextForEmpty(mEditPassword);
+        String email = Utils.checkEditTextForEmpty(getContext(),mEditEmail);
+        String password = Utils.checkEditTextForEmpty(getContext(),mEditPassword);
 
         //Revisa si hay valor vacío
         if (email == null || password == null) {
@@ -126,27 +127,6 @@ public class LoginFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Correo/Contraseña incorrectos", Toast.LENGTH_LONG).show();
         }
-    }
-
-    //endregion
-
-    //region utils
-
-    /**
-     * Revisa si un EditText contiene un texto no vacio.
-     * Si el edit text es vacio le establece un error y le da foco.
-     *
-     * @param editText
-     * @return El texto que contiene. {null} en caso de que sea vacio.
-     */
-    private String checkEditTextForEmpty(EditText editText) {
-        String value = editText.getText().toString();
-        if (TextUtils.isEmpty(value)) {
-            editText.setError(getString(R.string.error_field_required));
-            editText.requestFocus();
-            return null;
-        }
-        return value;
     }
 
     //endregion

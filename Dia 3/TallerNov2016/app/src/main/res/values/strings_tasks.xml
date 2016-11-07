@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Titulos de las ventanas-->
+    <string name="title_tasks_screen">Mis tareas</string>
+    <string name="title_create_task_screen">Nueva tarea</string>
+
+    <!--Hint para los editText-->
+    <string name="hint_task_title">Titulo</string>
+    <string name="hint_task_detail">Detalle</string>
+
+    <!--Botones-->
+    <string name="action_read_qr">QR</string>
+    <string name="action_take_photo">Tomar foto</string>
+
+    <!--Menu-->
+    <string name="action_save">Guardar</string>
+
+</resources>

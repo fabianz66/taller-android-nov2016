@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.fabian.tallernov2016.R;
+import com.fabian.tallernov2016.Utils;
 
 /**
  * Created by fabian on 11/5/16.
@@ -103,11 +104,11 @@ public class RegisterFragment extends Fragment {
         mEditPasswordConfirm.setError(null);
 
         // Obtiene los valores ingresados por el usuario
-        String email = checkEditTextForEmpty(mEditEmail);
-        String firstName = checkEditTextForEmpty(mEditFirstName);
-        String lastName = checkEditTextForEmpty(mEditLastName);
-        String password = checkEditTextForEmpty(mEditPassword);
-        String passwordConfirm = checkEditTextForEmpty(mEditPasswordConfirm);
+        String email = Utils.checkEditTextForEmpty(getContext(),mEditEmail);
+        String firstName = Utils.checkEditTextForEmpty(getContext(),mEditFirstName);
+        String lastName = Utils.checkEditTextForEmpty(getContext(),mEditLastName);
+        String password = Utils.checkEditTextForEmpty(getContext(),mEditPassword);
+        String passwordConfirm = Utils.checkEditTextForEmpty(getContext(),mEditPasswordConfirm);
 
         //Revisa si hay valor vacío
         if (email == null || firstName == null || lastName == null || password == null || passwordConfirm == null) {
@@ -137,27 +138,6 @@ public class RegisterFragment extends Fragment {
 
         // Intenta crear la cuenta
         Toast.makeText(getContext(), "Bienvenido", Toast.LENGTH_LONG).show();
-    }
-
-    //endregion
-
-    //region utils
-
-    /**
-     * Revisa si un EditText contiene un texto no vacío.
-     * Si el texto es vacío le establece un error al EditText y le da foco.
-     *
-     * @param editText El EditText por validar
-     * @return El texto que contiene. {null} en caso de que sea vacío.
-     */
-    private String checkEditTextForEmpty(EditText editText) {
-        String value = editText.getText().toString();
-        if (TextUtils.isEmpty(value)) {
-            editText.setError(getString(R.string.error_field_required));
-            editText.requestFocus();
-            return null;
-        }
-        return value;
     }
 
     //endregion

@@ -3,10 +3,7 @@ package com.fabian.tallernov2016;
 
 import android.app.Application;
 
-import com.fabian.tallernov2016.models.Task;
 import com.fabian.tallernov2016.models.User;
-
-import java.util.List;
 
 /**
  * Created by fabian on 11/6/16.
