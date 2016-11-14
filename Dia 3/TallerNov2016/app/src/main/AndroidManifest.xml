@@ -2,19 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fabian.tallernov2016">
 
-    Esto
+    <!--Esto restringe los dispositivos a SOLO los que tengan camara a nivel de Google Play-->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <!--Esto pide permiso para utilizarla-->
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!--Se pide permiso para escribir en la memoria del dispositivo-->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
     <application
-        android:name=".AppContext"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -29,9 +30,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.QRCodeScannerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.fabian.tallernov2016.fileprovider"
@@ -39,7 +39,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+                android:resource="@xml/file_provider_paths" />
         </provider>
 
     </application>
