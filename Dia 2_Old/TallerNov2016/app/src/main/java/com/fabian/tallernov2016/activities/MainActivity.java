@@ -1,8 +1,6 @@
 package com.fabian.tallernov2016.activities;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -11,17 +9,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
+import com.fabian.tallernov2016.AppContext;
 import com.fabian.tallernov2016.R;
 import com.fabian.tallernov2016.fragments.TasksFragment;
+import com.fabian.tallernov2016.models.User;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    //Region Atributos
-
-    ActionBarDrawerToggle mDrawerToggle;
-
-    //endregion
 
     //region Ciclo de vida
 
@@ -29,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Metodo que se llama cuando la Actividad es creada por primera vez
      * Aqui se debe establecer el view que va a mostrar y configurar
      * de acuerdo a las necesidades.
-     *
      * @param savedInstanceState
      */
     @Override
@@ -41,26 +36,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //Configura el menu que muestra las secciones del app
         setupNavigation();
-    }
 
-    @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        //Muestra la info del usuario en el header
+        setupNavigationHeader();
     }
 
     //endregion
@@ -78,14 +56,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Se habilita el icono de home en el toolbar
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        //Crea el ActionBarDrawerToggle que se muestra en el toolbar para abrir/cerrar el Drawer Menu
+        //Crea el hamburguer button que se muestra en el toolbar para abrir/cerrar el Drawer Menu
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(mDrawerToggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         //Asigna un listener para cuando se selecciona una seccion del menu
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -96,6 +71,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_tareas));
     }
 
+
+    /**
+     * Muestra la info del usuario en el header del navigation view
+     */
+    private void setupNavigationHeader()
+    {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        TextView headerUserName = (TextView) header.findViewById(R.id.nav_header_username);
+        TextView headerUserEmail = (TextView) header.findViewById(R.id.nav_header_email);
+        User user = ((AppContext)getApplication()).getUser();
+        headerUserName.setText(user.getName());
+        headerUserEmail.setText(user.getEmail());
+    }
 
 
     /**
@@ -116,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         //Muestra el fragment
-        if (fragment != null) {
+        if(fragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
         }
 
