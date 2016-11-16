@@ -7,4 +7,10 @@
             android:title="@string/nav_drawer_tasks" />
     </group>
 
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_logout"
+            android:title="@string/nav_drawer_logout" />
+    </group>
+
 </menu>

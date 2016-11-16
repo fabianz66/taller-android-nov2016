@@ -5,13 +5,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
@@ -39,26 +37,25 @@ import java.util.Locale;
  * Created by fabian on 11/6/16.
  */
 
-public class CreateTaskFragment extends Fragment implements TitleSelectDialogFragment.onTitleSelectedListener {
+public class CreateTaskFragment extends Fragment {
 
-    //Request codes
-    static final int REQUEST_CODE_CAM_PERMISSION = 1;
-    static final int REQUEST_CODE_IMG_CAPTURE = 2;
+    //Camera permission code
+    static final int CAMERA_PHOTOS_PERMISSION_REQUEST_CODE = 2;
+
+    //Codigo para pedir que se tome una foto
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     //region Atributos
 
-    File mCurrentPhotoFile;
+    EditText mEditTitle;
+    EditText mEditDetail;
+    String mCurrentPhotoPath;
     Bitmap mCamImage;
     ImageView mCamPreview;
 
-    EditText mEditTitle;
-    EditText mEditDetail;
-
     //endregion
 
-
     //region Ciclo de vida
-
 
     @Override
     public void onResume() {
@@ -70,12 +67,11 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
             actionBar.setTitle(R.string.title_create_task_screen);
         }
 
-        //Si no se tienen permisos se piden
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAM_PERMISSION);
+        //Pedimos permiso para la camara
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, CAMERA_PHOTOS_PERMISSION_REQUEST_CODE);
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,9 +81,9 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
         View view = inflater.inflate(R.layout.fragment_create_task, null);
 
         //Guarda los views que se van a utilizar luego
+        mEditTitle = (EditText) view.findViewById(R.id.editTitle);
+        mEditDetail = (EditText) view.findViewById(R.id.editDetail);
         mCamPreview = (ImageView) view.findViewById(R.id.ivCamPhoto);
-        mEditTitle = (EditText) view.findViewById(R.id.etTaskTitle);
-        mEditDetail = (EditText) view.findViewById(R.id.etTaskDetail);
 
         //Asigna eventos a los botones
         view.findViewById(R.id.cameraButton).setOnClickListener(new View.OnClickListener() {
@@ -97,45 +93,17 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
             }
         });
 
-        view.findViewById(R.id.qrCodeButton).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.qrButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openQRScannerScreen();
             }
         });
 
-        view.findViewById(R.id.titlesDialogButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openTitleSelectDialog();
-            }
-        });
-
+        //Avisamos que este fragment crea sus propios elementos en el toolbar
+        //Esto va a llamar onCreateOptionsMenu
         setHasOptionsMenu(true);
         return view;
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE_IMG_CAPTURE) {
-                mCamImage = BitmapFactory.decodeFile(mCurrentPhotoFile.getAbsolutePath(), null);
-                mCamPreview.setImageBitmap(mCamImage);
-            }else if(requestCode == QRScannerActivity.REQUEST_CODE_QR) {
-
-                //Rellena el edittext
-                String code = data.getStringExtra(QRScannerActivity.QR_CODE_INTENT_KEY);
-                mEditDetail.setText(code);
-            }
-        }
-    }
-
-    @Override
-    public void onTitleSelected(String title) {
-        mEditTitle.setText(title);
     }
 
     @Override
@@ -145,23 +113,51 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == QRScannerActivity.QR_CODE_REQUEST_CODE) {
+
+                //Obtiene el codigo leido
+                String qrCodeContent = data.getStringExtra(QRScannerActivity.QR_CODE_INTENT_KEY);
+
+                //Rellena el campo de detalle
+                mEditDetail.setText(qrCodeContent);
+
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+
+                try {
+
+                    //Obtiene la imagen del lugar donde se guardó y la muestra
+                    mCamImage = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.parse(mCurrentPhotoPath));
+                    mCamPreview.setImageBitmap(mCamImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_save) {
-            Toast.makeText(getContext(), "Guardar", Toast.LENGTH_SHORT).show();
+
+        switch(item.getItemId()) {
+            case R.id.action_save:
+                attemptSave();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-
     //endregion
-
 
     //region Eventos de botones
 
     private void openCameraScreen() {
 
         //Primero se revisan los permisos para acceder a la camara
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getContext(), "No hay permisos para acceder a la camara", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -173,10 +169,9 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
             //Crea el archivo donde se va a guardar la imagen
             File imageFile = createImageFile();
             if (imageFile != null) {
-                mCurrentPhotoFile = imageFile;
-                Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.fabian.tallernov2016.fileprovider", mCurrentPhotoFile);
+                Uri photoURI = FileProvider.getUriForFile(getActivity(), "com.fabian.tallernov2016.fileprovider", imageFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_CODE_IMG_CAPTURE);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             } else {
                 Toast.makeText(getContext(), "Error creando archivo", Toast.LENGTH_SHORT).show();
             }
@@ -186,26 +181,18 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
     private void openQRScannerScreen() {
 
         //Primero se revisan los permisos para acceder a la camara
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getContext(), "No hay permisos para acceder a la camara", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //Inicia el activity esperando un resultado. Esto va a generar una llamada a onActivityResult
-        Intent intent = new Intent(getActivity(), QRScannerActivity.class);
-        startActivityForResult(intent, QRScannerActivity.REQUEST_CODE_QR);
+        //Muestra la activity para leer de un QR
+        Intent scannerIntent = new Intent(getActivity(), QRScannerActivity.class);
+        startActivityForResult(scannerIntent, QRScannerActivity.QR_CODE_REQUEST_CODE);
     }
 
-    private void openTitleSelectDialog() {
-
-        //Se crea el FragmentDialog
-        TitleSelectDialogFragment dialogFragment = new TitleSelectDialogFragment();
-
-        //Se guarda el target fragment a quien notificar cuando se selecciona un titulo
-        dialogFragment.setTargetFragment(this, 1);
-
-        //Se muestra el dialogo
-        dialogFragment.show(getFragmentManager(), null);
+    private void attemptSave() {
+        Toast.makeText(getContext(), "Guardar", Toast.LENGTH_SHORT).show();
     }
 
     //endregion
@@ -224,6 +211,9 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
                     ".jpg",         // suffix
                     storageDir      // directory
             );
+
+            // Save a file: path for use with ACTION_VIEW intents
+            mCurrentPhotoPath = "file:" + imageFile.getAbsolutePath();
             return imageFile;
         } catch (IOException e) {
             e.printStackTrace();

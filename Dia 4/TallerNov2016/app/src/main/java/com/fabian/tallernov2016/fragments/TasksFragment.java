@@ -13,23 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fabian.tallernov2016.R;
-import com.fabian.tallernov2016.adapters.TasksAdapter;
+import com.fabian.tallernov2016.recyclerview.TasksAdapter;
 
 /**
- * Created by fabian on 11/6/16.
+ * Created by fabian on 11/13/16.
  */
 
 public class TasksFragment extends Fragment {
-
-    //region Atributos
-
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
-    //enregion
-
-    //region Ciclo de vida
 
     @Override
     public void onResume() {
@@ -45,16 +35,12 @@ public class TasksFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        //Crea el view a partir del XML
         View view = inflater.inflate(R.layout.fragment_tasks, null);
 
-        //Configura la lista
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.tasks_list);
-        mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new TasksAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        //Se obtiene el recycler view, se le asigna el layout manager y el adapter
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tasks_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new TasksAdapter());
 
         //Configura la accion del boton para agregar nueva tarea
         view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
@@ -66,13 +52,14 @@ public class TasksFragment extends Fragment {
         return view;
     }
 
-    //endregion
-
     //region Acciones de UI
 
     private void showCreateTaskFragment()
     {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//        transaction.replace(R.id.fragment_container, new CreateTaskFragment()).commit();
         transaction.replace(R.id.fragment_container, new CreateTaskFragment()).addToBackStack(null).commit();
     }
+
+    //endregion
 }

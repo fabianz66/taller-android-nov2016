@@ -123,7 +123,7 @@ public class LoginFragment extends Fragment {
         }
 
         // Intenta hacer login
-        if(email.equals("f@f.com") && password.equals("123")) {
+        if(email.equals("f@f.com") && password.equals("password")) {
 
             //Abre la nueva activity
             Intent intent = new Intent(getActivity(), MainActivity.class);

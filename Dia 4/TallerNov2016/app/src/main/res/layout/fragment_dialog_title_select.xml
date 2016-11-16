@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Seleccione el titulo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/rbLeche"
+        android:layout_margin="15dp"
+        android:id="@+id/titlesGroup">
+
+        <RadioButton
+            android:text="Visitar abuela"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbAbuela"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Comprar arroz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbArroz"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Comprar carne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbCarne"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:text="Comprar leche"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rbLeche"
+            android:layout_weight="1" />
+    </RadioGroup>
+
+    <Button
+        android:text="Guardar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/saveTitleButton" />
+</LinearLayout>

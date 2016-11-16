@@ -2,25 +2,30 @@ package com.fabian.tallernov2016.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.fabian.tallernov2016.AppContext;
 import com.fabian.tallernov2016.R;
 import com.fabian.tallernov2016.Utils;
 import com.fabian.tallernov2016.activities.MainActivity;
+import com.fabian.tallernov2016.models.User;
+import com.fabian.tallernov2016.networking.UsersBackendAccess;
 
 /**
  * Ventana que permite al usuario iniciar sesión.
- *
+ * <p>
  * También de la opción de ir a la ventana de Crear una nueva cuenta.
- *
+ * <p>
  * Created by fabian on 11/5/16.
  */
 
@@ -30,6 +35,7 @@ public class LoginFragment extends Fragment {
 
     EditText mEditEmail;
     EditText mEditPassword;
+    UsersBackendAccess mBackendAccess;
 
     //endregion
 
@@ -40,10 +46,16 @@ public class LoginFragment extends Fragment {
         super.onResume();
 
         //Cambia el titulo de la ventana
-        ActionBar actionBar = ((AppCompatActivity)getActivity()).getSupportActionBar();
-        if(actionBar != null) {
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setTitle(R.string.title_login_screen);
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBackendAccess = new UsersBackendAccess((AppContext) getActivity().getApplication());
     }
 
     @Override
@@ -109,31 +121,37 @@ public class LoginFragment extends Fragment {
         }
 
         // Valida el correo
-        if(!email.contains("@")) {
+        if (!email.contains("@")) {
             mEditEmail.setError(getString(R.string.error_invalid_email));
             mEditEmail.requestFocus();
             return;
         }
 
         // Valida la contraseña
-        if(password.length() < 3) {
+        if (password.length() < 3) {
             mEditPassword.setError(getString(R.string.error_invalid_password));
             mEditPassword.requestFocus();
             return;
         }
 
-        // Intenta hacer login
-        if(email.equals("f@f.com") && password.equals("password")) {
+        //Crea el usuario
+        User user = new User(email, password);
+        mBackendAccess.login(user, new UsersBackendAccess.Callback() {
+            @Override
+            public void onRequestEnded(boolean success, String error) {
+                if (success) {
 
-            //Abre la nueva activity
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            startActivity(intent);
+                    //Abre la nueva activity
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
 
-            //Cierra la activity actual
-            getActivity().finish();
-        } else {
-            Toast.makeText(getContext(), "Correo/Contraseña incorrectos", Toast.LENGTH_LONG).show();
-        }
+                    //Cierra la activity actual
+                    getActivity().finish();
+                } else {
+                    Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     //endregion

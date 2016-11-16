@@ -1,5 +1,6 @@
 package com.fabian.tallernov2016.models;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

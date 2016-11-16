@@ -1,6 +1,6 @@
 <resources>
+    <string name="nav_drawer_profile">Perfil</string>
     <string name="nav_drawer_tasks">Tareas</string>
-    <string name="nav_drawer_logout">Cerrar sesion</string>
-    <string name="navigation_drawer_open">Abrir menu</string>
-    <string name="navigation_drawer_close">Cerrar menu</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

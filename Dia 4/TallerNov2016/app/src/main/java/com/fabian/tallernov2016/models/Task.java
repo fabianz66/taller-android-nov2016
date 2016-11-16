@@ -1,33 +1,44 @@
 package com.fabian.tallernov2016.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Created by fabian on 11/6/16.
+ * Created by fabian on 11/13/16.
  */
 
 public class Task {
 
     private String mTitle;
     private String mDetail;
-    private String mImageUrl;
 
-    public Task(String title, String detail, String imageUrl){
+    public Task(String title, String detail) {
         mTitle = title;
         mDetail = detail;
-        mImageUrl = imageUrl;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return mTitle;
     }
 
-    public String getDetail()
-    {
+    public String getDetail() {
         return mDetail;
     }
 
-    public String getImageUrl()
-    {
-        return mImageUrl;
+    public static List<Task> dummyData() {
+        ArrayList<Task> list = new ArrayList<>();
+        list.add(new Task("Comprar leche","0% grasa"));
+        list.add(new Task("Comprar pan","Integral"));
+        list.add(new Task("Comprar helados","De yogurt"));
+        list.add(new Task("Comprar leche","0% grasa"));
+        list.add(new Task("Comprar pan","Integral"));
+        list.add(new Task("Comprar helados","De yogurt"));
+        list.add(new Task("Comprar leche","0% grasa"));
+        list.add(new Task("Comprar pan","Integral"));
+        list.add(new Task("Comprar helados","De yogurt"));
+        list.add(new Task("Comprar leche","0% grasa"));
+        list.add(new Task("Comprar pan","Integral"));
+        list.add(new Task("Comprar helados","De yogurt"));
+        return list;
     }
 }

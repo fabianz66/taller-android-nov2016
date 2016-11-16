@@ -7,19 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fabian.tallernov2016.AppContext;
 import com.fabian.tallernov2016.R;
 import com.fabian.tallernov2016.Utils;
 import com.fabian.tallernov2016.activities.MainActivity;
 import com.fabian.tallernov2016.models.User;
-import com.fabian.tallernov2016.networking.UsersBackendAccess;
+import com.fabian.tallernov2016.networking.BackendAccess;
 
 /**
  * Created by fabian on 11/5/16.
@@ -34,7 +32,7 @@ public class RegisterFragment extends Fragment {
     EditText mEditLastName;
     EditText mEditPassword;
     EditText mEditPasswordConfirm;
-    UsersBackendAccess mBackendAccess;
+    BackendAccess mBackendAccess;
 
     //endregion
 
@@ -54,9 +52,7 @@ public class RegisterFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Inicializa variales
-        mBackendAccess = new UsersBackendAccess((AppContext) getActivity().getApplication());
+        mBackendAccess = new BackendAccess(getContext());
     }
 
     @Override
@@ -151,11 +147,13 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
+
         //Crea el usuario
         User user = new User(email, firstName, lastName, password, passwordConfirm);
 
         //Manda a crear al backend
-        mBackendAccess.register(user, new UsersBackendAccess.Callback() {
+        mBackendAccess.register(user, new BackendAccess.Callback() {
+
             @Override
             public void onRequestEnded(boolean success, String error) {
                 if (success) {

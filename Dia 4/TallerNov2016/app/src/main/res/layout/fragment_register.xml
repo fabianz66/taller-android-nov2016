@@ -33,8 +33,7 @@
                     android:layout_height="match_parent"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:text="f@f.com" />
+                    android:maxLines="1" />
 
                 <EditText
                     android:id="@+id/et_firstName"
@@ -43,7 +42,7 @@
                     android:hint="@string/prompt_first_name"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:text="Fabian" />
+                    android:text="Juan" />
 
                 <EditText
                     android:id="@+id/et_lastName"
@@ -52,7 +51,7 @@
                     android:hint="@string/prompt_last_name"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:text="Zamora" />
+                    android:text="Perez" />
 
                 <EditText
                     android:id="@+id/et_password"

@@ -41,7 +41,8 @@
                     android:layout_height="match_parent"
                     android:hint="@string/prompt_first_name"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="Juan" />
 
                 <EditText
                     android:id="@+id/et_lastName"
@@ -49,7 +50,8 @@
                     android:layout_height="match_parent"
                     android:hint="@string/prompt_last_name"
                     android:inputType="textEmailAddress"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="Perez" />
 
                 <EditText
                     android:id="@+id/et_password"
@@ -57,7 +59,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
                     android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="password" />
 
 
                 <EditText
@@ -66,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_confirm_password"
                     android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:text="password" />
 
             <Button
                 android:id="@+id/register_button"
