@@ -62,4 +62,10 @@ public class TitleSelectDialogFragment extends DialogFragment {
         });
         return root;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_Dialog);
+    }
 }
