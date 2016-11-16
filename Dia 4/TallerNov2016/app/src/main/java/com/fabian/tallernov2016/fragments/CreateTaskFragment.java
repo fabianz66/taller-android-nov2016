@@ -204,6 +204,10 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
         //Se guarda el target fragment a quien notificar cuando se selecciona un titulo
         dialogFragment.setTargetFragment(this, 1);
 
+        Bundle args = new Bundle();
+        args.putInt("position", R.id.rbCarne);
+        dialogFragment.setArguments(args);
+
         //Se muestra el dialogo
         dialogFragment.show(getFragmentManager(), null);
     }

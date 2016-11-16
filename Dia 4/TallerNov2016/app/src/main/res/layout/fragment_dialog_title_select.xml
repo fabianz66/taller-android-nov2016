@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="#BBB"
+    android:orientation="vertical"
+    android:padding="50dp">
 
     <TextView
-        android:text="Seleccione el titulo"
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2" />
+        android:text="Seleccione el titulo" />
 
     <RadioGroup
+        android:id="@+id/titlesGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checkedButton="@+id/rbLeche"
-        android:layout_margin="15dp"
-        android:id="@+id/titlesGroup">
+        android:checkedButton="@+id/rbLeche">
 
         <RadioButton
-            android:text="Visitar abuela"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/rbAbuela"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:text="Comprar arroz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Visitar abuela" />
+
+        <RadioButton
             android:id="@+id/rbArroz"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:text="Comprar carne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Comprar arroz" />
+
+        <RadioButton
             android:id="@+id/rbCarne"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:text="Comprar leche"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Comprar carne" />
+
+        <RadioButton
             android:id="@+id/rbLeche"
-            android:layout_weight="1" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Comprar leche" />
     </RadioGroup>
 
     <Button
-        android:text="Guardar"
-        android:layout_width="wrap_content"
+        android:id="@+id/saveTitleButton"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/saveTitleButton" />
+        android:text="Guardar" />
 </LinearLayout>

@@ -33,7 +33,7 @@ public class TitleSelectDialogFragment extends DialogFragment {
 
         //Se verifica que la activity que llamo el Dialogo implemente la interfaz necesaria
         if (!(getTargetFragment() instanceof onTitleSelectedListener)) {
-            throw new RuntimeException("Activity must implement onTitleSelectedListener");
+            throw new RuntimeException("Caller Fragment must implement onTitleSelectedListener");
         }
     }
 
@@ -47,12 +47,20 @@ public class TitleSelectDialogFragment extends DialogFragment {
         //Guarda el RadioGroup
         mRadioGroup = (RadioGroup) root.findViewById(R.id.titlesGroup);
 
+        //
+        if(getArguments() != null) {
+            int id = getArguments().getInt("position");
+            mRadioGroup.check(id);
+        }
+
+
         root.findViewById(R.id.saveTitleButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Se le notifica a la activity
-                RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(mRadioGroup.getCheckedRadioButtonId());
+                int selectedRadioButtonId = mRadioGroup.getCheckedRadioButtonId();
+                RadioButton radioButton = (RadioButton) mRadioGroup.findViewById(selectedRadioButtonId);
                 String selectedText = radioButton.getText().toString();
                 ((onTitleSelectedListener) getTargetFragment()).onTitleSelected(selectedText);
 

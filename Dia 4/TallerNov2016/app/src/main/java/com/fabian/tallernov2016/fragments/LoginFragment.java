@@ -132,25 +132,32 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        // Intenta hacer login
-        User user = new User(email, password);
-        mBackendAccess.login(user, new BackendAccess.Callback() {
-            @Override
-            public void onRequestEnded(boolean success, String error) {
+//        // Intenta hacer login
+//        User user = new User(email, password);
+//        mBackendAccess.login(user, new BackendAccess.Callback() {
+//            @Override
+//            public void onRequestEnded(boolean success, String error) {
+//
+//                if (success) {
+//
+//                    //Abre la nueva activity
+//                    Intent intent = new Intent(getActivity(), MainActivity.class);
+//                    startActivity(intent);
+//
+//                    //Cierra la activity actual
+//                    getActivity().finish();
+//                } else {
+//                    Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
 
-                if (success) {
+        //Abre la nueva activity
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
 
-                    //Abre la nueva activity
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-
-                    //Cierra la activity actual
-                    getActivity().finish();
-                } else {
-                    Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        //Cierra la activity actual
+        getActivity().finish();
     }
 
     //endregion
