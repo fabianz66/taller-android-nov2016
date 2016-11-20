@@ -2,10 +2,12 @@ package com.fabian.tallernov2016.networking;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.fabian.tallernov2016.models.User;
 
 import org.json.JSONException;
@@ -72,7 +74,7 @@ public class BackendAccess {
             builder.appendPath(USERS_LOGIN_PATH);
             String url = builder.build().toString() + URL_EXTENSION;
 
-            //Manda el request utilizando volley
+
             VolleyRequestSingleton.getInstance(mContext).addJsonObjectRequest(Request.Method.POST, url, container, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {

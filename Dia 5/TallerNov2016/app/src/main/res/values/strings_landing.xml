@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Strings relacionados a la ventana de login -->
+    <string name="title_login_screen">Inicio de sesión</string>
+    <string name="action_login">Iniciar sesión</string>
+    <string name="action_register_from_login">Crea una cuenta</string>
+    <string name="text_register_from_login">¿No tiene cuenta aún?</string>
+
+    <!-- Strings relacionados a la ventana de registro -->
+    <string name="title_register_screen">Registro</string>
+    <string name="action_register">Crear</string>
+    <string name="action_login_from_register">Inicia sesión</string>
+    <string name="text_login_from_register">¿Ya tiene una cuenta?</string>
+
+    <!--Hint para los edittext-->
+    <string name="prompt_email">Correo electrónico</string>
+    <string name="prompt_first_name">Nombre</string>
+    <string name="prompt_last_name">Apellidos</string>
+    <string name="prompt_password">Contraseña</string>
+    <string name="prompt_confirm_password">Confirma la contraseña</string>
+
+    <!--Errores-->
+    <string name="error_field_required">Debe ingresar este campo</string>
+    <string name="error_invalid_email">Correo inválido</string>
+    <string name="error_invalid_password">Contraseña inválida</string>
+    <string name="error_invalid_password_confirmation">Confirmación fallida</string>
+
+</resources>

@@ -31,20 +31,6 @@ public class VolleyRequestSingleton {
         return instance;
     }
 
-    //endregion
-
-
-    // region Attributes
-
-    // Volley Queue
-
-    private RequestQueue mQueue;
-
-    // endregion
-
-
-    // region Constructor
-
     /**
      * Constructor
      *
@@ -55,6 +41,15 @@ public class VolleyRequestSingleton {
     }
 
     //endregion
+
+
+    // region Attributes
+
+    // Volley Queue
+
+    private RequestQueue mQueue;
+
+    // endregion
 
 
     //region Queue request methods
@@ -78,6 +73,10 @@ public class VolleyRequestSingleton {
         JsonObjectRequest request = new JsonObjectRequest(method, url, body, listener, errorListener);
 
         //Add the request to the RequestQueue.
+        mQueue.add(request);
+    }
+
+    public void addRequest(JsonObjectRequest request) {
         mQueue.add(request);
     }
 

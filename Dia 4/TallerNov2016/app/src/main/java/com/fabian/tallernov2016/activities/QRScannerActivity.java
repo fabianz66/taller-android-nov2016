@@ -62,6 +62,7 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
     @Override
     public void handleResult(Result result) {
 
+        //region Todavia no
         //Set result
         Intent data = new Intent();
         data.putExtra(QR_CODE_INTENT_KEY, result.getText());
@@ -69,5 +70,6 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 
         //End activity
         finish();
+        //endregion
     }
 }

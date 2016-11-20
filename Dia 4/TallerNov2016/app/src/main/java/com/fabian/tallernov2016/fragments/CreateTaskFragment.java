@@ -121,10 +121,14 @@ public class CreateTaskFragment extends Fragment implements TitleSelectDialogFra
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
+
             if (requestCode == REQUEST_CODE_IMG_CAPTURE) {
                 mCamImage = BitmapFactory.decodeFile(mCurrentPhotoFile.getAbsolutePath(), null);
                 mCamPreview.setImageBitmap(mCamImage);
-            }else if(requestCode == QRScannerActivity.REQUEST_CODE_QR) {
+            }
+
+
+            else if(requestCode == QRScannerActivity.REQUEST_CODE_QR) {
 
                 //Rellena el edittext
                 String code = data.getStringExtra(QRScannerActivity.QR_CODE_INTENT_KEY);
