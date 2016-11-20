@@ -13,7 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by fabian on 11/6/16.
@@ -24,7 +26,7 @@ public class BackendAccess {
     //region Constants
 
     private static final String HTTP_SCHEME = "http";
-    private static final String AUTHORITY = "45.55.130.134:3000";
+    private static final String AUTHORITY = "45.55.130.134:80";
     private static final String USERS_PATH = "users";
     private static final String USERS_LOGIN_PATH = "sign_in";
     private static final String USERS_LOGOUT_PATH = "sign_out";
@@ -50,7 +52,8 @@ public class BackendAccess {
 
     //region Atributos
 
-    Context mContext;
+    //Contexto del app
+    private Context mContext;
 
     //endregion
 
@@ -85,8 +88,11 @@ public class BackendAccess {
                     //Guarda la info del usuario
                     User responseUser = User.fromJson(response);
 
+                    //Guarda el usuario
+                    Preferences.saveUser(mContext, responseUser);
+
                     //Guarda los headers
-                    Headers.addUserHeaders(responseUser);
+                    VolleyRequestSingleton.getInstance(mContext).saveHeadersForFutureRequests(responseUser);
 
                     //Notifica
                     callback.onRequestEnded(true, null);
@@ -112,12 +118,16 @@ public class BackendAccess {
         builder.appendPath(USERS_PATH);
         builder.appendPath(USERS_LOGOUT_PATH);
         String url = builder.build().toString() + URL_EXTENSION;
+
         VolleyRequestSingleton.getInstance(mContext).addJsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
 
+                //Borra el user de los Preferences
+                Preferences.deleteUser(mContext);
+
                 //Elimina los headers
-                Headers.clear();
+                VolleyRequestSingleton.getInstance(mContext).clearHeaders();
 
                 //Notifica
                 callback.onRequestEnded(true, null);
@@ -155,6 +165,15 @@ public class BackendAccess {
             VolleyRequestSingleton.getInstance(mContext).addJsonObjectRequest(Request.Method.POST, url, container, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
+
+                    //Guarda la info del usuario
+                    User responseUser = User.fromJson(response);
+
+                    //Guarda el usuario
+                    Preferences.saveUser(mContext, responseUser);
+
+                    //Guarda los headers
+                    VolleyRequestSingleton.getInstance(mContext).saveHeadersForFutureRequests(responseUser);
 
                     //Notifica
                     callback.onRequestEnded(true, null);

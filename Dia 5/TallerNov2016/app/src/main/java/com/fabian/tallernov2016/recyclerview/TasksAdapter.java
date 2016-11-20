@@ -56,7 +56,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksHolder> {
 
         //Se actualiza la imagen
         ImageView imageHolder = holder.mImageView;
-        Picasso.with(imageHolder.getContext()).load(taskToShow.getImageUrl()).into(imageHolder);
+        Picasso.with(imageHolder.getContext()).load(taskToShow.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(imageHolder);
     }
 
     @Override

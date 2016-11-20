@@ -3,16 +3,18 @@ package com.fabian.tallernov2016.networking;
 import android.content.Context;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.fabian.tallernov2016.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,19 +24,19 @@ public class VolleyRequestSingleton {
 
     //region Singleton
 
-    // Singleton instance
-    private static VolleyRequestSingleton instance = null;
+    // Singleton sInstance
+    private static VolleyRequestSingleton sInstance = null;
 
     /**
-     * Get singleton instance
+     * Get singleton sInstance
      *
-     * @return singleton instance
+     * @return singleton sInstance
      */
     public static synchronized VolleyRequestSingleton getInstance(Context pContext) {
-        if (instance == null) {
-            instance = new VolleyRequestSingleton(pContext);
+        if (sInstance == null) {
+            sInstance = new VolleyRequestSingleton(pContext);
         }
-        return instance;
+        return sInstance;
     }
 
     /**
@@ -44,6 +46,7 @@ public class VolleyRequestSingleton {
      */
     private VolleyRequestSingleton(Context pContext) {
         mQueue = Volley.newRequestQueue(pContext.getApplicationContext());
+        mHeaders = new HashMap<>();
     }
 
     //endregion
@@ -54,6 +57,7 @@ public class VolleyRequestSingleton {
     // Volley Queue
 
     private RequestQueue mQueue;
+    private Map<String, String> mHeaders;
 
     // endregion
 
@@ -78,10 +82,9 @@ public class VolleyRequestSingleton {
         JsonObjectRequest request = new JsonObjectRequest(method, url, body, listener, errorListener) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return Headers.getHeaders();
+                return mHeaders;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(15000, 0, 0));
 
         //Add the request to the RequestQueue.
         mQueue.add(request);
@@ -104,13 +107,29 @@ public class VolleyRequestSingleton {
         JsonArrayRequest request = new JsonArrayRequest(method, url, params, listener, errorListener){
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return Headers.getHeaders();
+                return mHeaders;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(15000, 0, 0));
 
         //Add the request to the RequestQueue.
         mQueue.add(request);
+    }
+
+    /**
+     *  Guarda los headers que se necesitan enviar con cada request cuando un usuario tiene la
+     *  sesion iniciada.
+     * @param user El usuario que acaba de iniciar sesion.
+     */
+    public void saveHeadersForFutureRequests(User user){
+        mHeaders.put("X-User-Email", user.getEmail());
+        mHeaders.put("X-User-Token", user.getAuthToken());
+    }
+
+    /**
+     * Borra los headers guardados previamente con saveHeadersForFutureRequests()
+     */
+    public void clearHeaders() {
+        mHeaders.clear();
     }
 
     //endregion

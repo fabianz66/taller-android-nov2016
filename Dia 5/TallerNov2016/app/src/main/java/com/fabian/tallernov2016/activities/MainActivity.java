@@ -1,5 +1,6 @@
 package com.fabian.tallernov2016.activities;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -66,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mDrawerToggle.syncState();
@@ -88,18 +96,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.action_logout:
+                logout();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    private void logout() {
 
         mBackendAccess.logout(new BackendAccess.Callback() {
             @Override
             public void onRequestEnded(boolean success, String error) {
-                Toast.makeText(getApplicationContext(), "Adios", Toast.LENGTH_SHORT).show();
+                if(success) {
+                    Toast.makeText(getApplicationContext(), "Adios", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, LandingActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -136,8 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setCheckedItem(R.id.nav_tareas);
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_tareas));
     }
-
-
 
     /**
      * @param item
