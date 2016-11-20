@@ -26,6 +26,7 @@ public class LandingActivity extends AppCompatActivity {
             //Si existe un usuario con la sesion iniciada , pasa al MainActivity
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         }else {
 
             // Establece el view que contiene el contenedor para los fragment
