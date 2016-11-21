@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.fabian.tallernov2016.R;
 import com.fabian.tallernov2016.Utils;
 import com.fabian.tallernov2016.activities.MainActivity;
-import com.fabian.tallernov2016.models.User;
-import com.fabian.tallernov2016.networking.BackendAccess;
 
 /**
  * Created by fabian on 11/5/16.
@@ -32,7 +30,6 @@ public class RegisterFragment extends Fragment {
     EditText mEditLastName;
     EditText mEditPassword;
     EditText mEditPasswordConfirm;
-    BackendAccess mBackendAccess;
 
     //endregion
 
@@ -47,12 +44,6 @@ public class RegisterFragment extends Fragment {
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_register_screen);
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBackendAccess = new BackendAccess(getContext());
     }
 
     @Override
@@ -147,28 +138,12 @@ public class RegisterFragment extends Fragment {
             return;
         }
 
+        //Abre la nueva activity
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
 
-        //Crea el usuario
-        User user = new User(email, firstName, lastName, password, passwordConfirm);
-
-        //Manda a crear al backend
-        mBackendAccess.register(user, new BackendAccess.Callback() {
-
-            @Override
-            public void onRequestEnded(boolean success, String error) {
-                if (success) {
-
-                    //Abre la nueva activity
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-
-                    //Cierra la activity actual
-                    getActivity().finish();
-                } else {
-                    Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        //Cierra la activity actual
+        getActivity().finish();
     }
 
     //endregion

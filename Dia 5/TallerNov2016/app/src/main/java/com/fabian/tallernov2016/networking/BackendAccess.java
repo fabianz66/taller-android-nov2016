@@ -33,7 +33,7 @@ public class BackendAccess {
     private static final String TASKS_PATH = "tasks";
     private static final String URL_EXTENSION = ".json";
 
-    static Uri.Builder getBuilder() {
+    private static Uri.Builder getBuilder() {
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(HTTP_SCHEME).encodedAuthority(AUTHORITY);

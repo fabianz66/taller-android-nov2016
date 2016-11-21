@@ -86,9 +86,9 @@ public class User {
 
     //region JSON
 
-    public static User fromJson(JSONObject json)
+    public static com.fabian.tallernov2016.models.User fromJson(JSONObject json)
     {
-        User user = new User();
+        com.fabian.tallernov2016.models.User user = new com.fabian.tallernov2016.models.User();
         user.setEmail(json.optString(JSON_EMAIL));
         user.setFirstName(json.optString(JSON_FIRST_NAME));
         user.setLastName(json.optString(JSON_LAST_NAME));

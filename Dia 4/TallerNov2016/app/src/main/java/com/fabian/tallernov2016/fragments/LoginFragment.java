@@ -16,8 +16,6 @@ import android.widget.Toast;
 import com.fabian.tallernov2016.R;
 import com.fabian.tallernov2016.Utils;
 import com.fabian.tallernov2016.activities.MainActivity;
-import com.fabian.tallernov2016.models.User;
-import com.fabian.tallernov2016.networking.BackendAccess;
 
 /**
  * Ventana que permite al usuario iniciar sesión.
@@ -33,7 +31,6 @@ public class LoginFragment extends Fragment {
 
     EditText mEditEmail;
     EditText mEditPassword;
-    BackendAccess mBackendAccess;
 
     //endregion
 
@@ -48,12 +45,6 @@ public class LoginFragment extends Fragment {
         if (actionBar != null) {
             actionBar.setTitle(R.string.title_login_screen);
         }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBackendAccess = new BackendAccess(getContext());
     }
 
     @Override
@@ -132,32 +123,12 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        // Intenta hacer login
-        User user = new User(email, password);
-        mBackendAccess.login(user, new BackendAccess.Callback() {
-            @Override
-            public void onRequestEnded(boolean success, String error) {
-
-                if (success) {
-
-                    //Abre la nueva activity
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-
-                    //Cierra la activity actual
-                    getActivity().finish();
-                } else {
-                    Toast.makeText(getContext(), error, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
         //Abre la nueva activity
-//        Intent intent = new Intent(getActivity(), MainActivity.class);
-//        startActivity(intent);
-//
-//        //Cierra la activity actual
-//        getActivity().finish();
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
+
+        //Cierra la activity actual
+        getActivity().finish();
     }
 
     //endregion
