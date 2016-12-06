@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fabian.tallernov2016.R;
 import com.fabian.tallernov2016.models.Task;
@@ -20,7 +21,31 @@ import java.util.List;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksHolder> {
 
+    //region POr agregar
+
+
+    public interface onTaskClickListener {
+        void onTaskSelected(Task task);
+    }
+
     private List<Task> mTasks;
+    private onTaskClickListener mListener;
+
+    public TasksAdapter(onTaskClickListener listener) {
+        mListener = listener;
+    }
+
+    @Override
+    public int getItemCount() {
+        if(mTasks == null) {
+            return 0;
+        }
+        return mTasks.size();
+    }
+
+    public void setTasks(List<Task> tasks) {
+        mTasks = tasks;
+    }
 
     /**
      * Se llama cada vez que se necesita crear un nuevo viewholder.
@@ -45,7 +70,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksHolder> {
      * @param position
      */
     @Override
-    public void onBindViewHolder(TasksHolder holder, int position) {
+    public void onBindViewHolder(TasksHolder holder, final int position) {
 
         //Se busca el elemento que se va a mostrar
         Task taskToShow = mTasks.get(position);
@@ -56,15 +81,22 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksHolder> {
 
         //Se actualiza la imagen
         ImageView imageHolder = holder.mImageView;
-        Picasso.with(imageHolder.getContext()).load(taskToShow.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(imageHolder);
+        final Context context = imageHolder.getContext();
+        Picasso.with(context).load(taskToShow.getImageUrl()).placeholder(R.mipmap.ic_launcher).into(imageHolder);
+
+        //Click a la celda
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Task selectedTask = mTasks.get(position);
+                mListener.onTaskSelected(selectedTask);
+
+            }
+        });
     }
 
-    @Override
-    public int getItemCount() {
-        return mTasks != null ? mTasks.size() : 0;
-    }
 
-    public void setTasks(List<Task> tasks) {
-        mTasks = tasks;
-    }
+
+
 }

@@ -42,11 +42,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Establece el view que se va a mostrar en esta activity
-        setContentView(R.layout.activity_main);
-
         //Acceso al backend
         mBackendAccess = new BackendAccess(this);
+
+        //Establece el view que se va a mostrar en esta activity
+        setContentView(R.layout.activity_main);
 
         //Configura el menu que muestra las secciones del app
         setupNavigation();
@@ -65,6 +65,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
+        //
+        boolean recreandose = (savedInstanceState != null);
+        if (!recreandose) {
+
+            //Asigna un listener para cuando se selecciona una seccion del menu
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+            //Muestra la seccion de tareas por default
+            navigationView.setCheckedItem(R.id.nav_tareas);
+            onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_tareas));
+        } else {
+
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                mDrawerToggle.setDrawerIndicatorEnabled(false);
+            } else {
+                mDrawerToggle.setDrawerIndicatorEnabled(true);
+            }
+        }
     }
 
     @Override
@@ -87,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.onOptionsItemSelected(item)){
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -108,12 +127,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mBackendAccess.logout(new BackendAccess.Callback() {
             @Override
             public void onRequestEnded(boolean success, String error) {
-                if(success) {
+                if (success) {
                     Toast.makeText(getApplicationContext(), "Adios", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MainActivity.this, LandingActivity.class);
                     startActivity(intent);
                     finish();
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -149,8 +168,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //Muestra la seccion de tareas por default
-        navigationView.setCheckedItem(R.id.nav_tareas);
-        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_tareas));
+//        navigationView.setCheckedItem(R.id.nav_tareas);
+//        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_tareas));
     }
 
     /**

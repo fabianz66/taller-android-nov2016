@@ -132,11 +132,18 @@ public class LoginFragment extends Fragment {
             return;
         }
 
+        //Muestra el progress antes de llamar al backend
+        getActivity().findViewById(R.id.login_progress).setVisibility(View.VISIBLE);
+
         // Intenta hacer login
         User user = new User(email, password);
         mBackendAccess.login(user, new BackendAccess.Callback() {
             @Override
             public void onRequestEnded(boolean success, String error) {
+
+                //Se oculta el progress
+                getActivity().findViewById(R.id.login_progress).setVisibility(View.GONE);
+
 
                 if (success) {
 

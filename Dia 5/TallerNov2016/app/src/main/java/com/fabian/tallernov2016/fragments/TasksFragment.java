@@ -25,7 +25,7 @@ import java.util.List;
  * Created by fabian on 11/13/16.
  */
 
-public class TasksFragment extends Fragment {
+public class TasksFragment extends Fragment implements TasksAdapter.onTaskClickListener {
 
     private BackendAccess mBackendAccess;
     private TasksAdapter mAdapter;
@@ -60,7 +60,9 @@ public class TasksFragment extends Fragment {
         //Se obtiene el recycler view, se le asigna el layout manager y el adapter
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tasks_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new TasksAdapter();
+
+        mAdapter = new TasksAdapter(this);
+
         recyclerView.setAdapter(mAdapter);
 
         //Configura la accion del boton para agregar nueva tarea
@@ -94,6 +96,21 @@ public class TasksFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onTaskSelected(Task task) {
+
+        FragmentTransaction trans = getFragmentManager().beginTransaction();
+
+        TaskInfoFragment fragment = new TaskInfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("TASK", task);
+        fragment.setArguments(bundle);
+
+        trans.replace(R.id.fragment_container, fragment);
+        trans.addToBackStack(null);
+        trans.commit();
     }
 
     //endregion
