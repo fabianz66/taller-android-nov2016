@@ -6,6 +6,7 @@ import java.security.cert.CertificateException;
 
 /**
  * https://docs.oracle.com/javase/tutorial/security/apisign/gensig.html
+ * https://developer.android.com/training/articles/keystore.html
  * <p>
  * Pasos:
  * 1. Crear u obtener claves publicas y privadas.
@@ -27,14 +28,14 @@ public class FirmaDigital {
         try {
 
             //Obtiene la llave privada del certificado
-            KeyStore ks = KeyStore.getInstance("BKS");
+            KeyStore ks = KeyStore.getInstance("PKCS12");
             FileInputStream ksfis = new FileInputStream(certPath);
             BufferedInputStream ksbufin = new BufferedInputStream(ksfis);
             ks.load(ksbufin, certPass);
             PrivateKey priv = (PrivateKey) ks.getKey(alias, alias_pass);
 
             //Crea la clase que se utiliza para firmar el documento
-            Signature dsa = Signature.getInstance("SHA1withDSA", "SUN");
+            Signature dsa = Signature.getInstance("SHA1withRSA");
             dsa.initSign(priv);
 
             //Abre el documento que se va a firmar
@@ -71,8 +72,6 @@ public class FirmaDigital {
             error = e.toString();
         } catch (UnrecoverableKeyException e) {
             error = e.toString();
-        } catch (NoSuchProviderException e) {
-            error = e.toString();
         } catch (InvalidKeyException e) {
             error = e.toString();
         } catch (SignatureException e) {
@@ -81,29 +80,32 @@ public class FirmaDigital {
         return error;
     }
 
-    public static void verify(String certName, String signature, String document) {
+    public static String verify(String publicCertPath, String signaturePath, String docToSignPath) {
+
+        //El error en caso de haberlo.
+        String error = null;
+
         try {
 
             //Get public key from certificate
-            FileInputStream certfis = new FileInputStream(certName);
-            java.security.cert.CertificateFactory cf =
-                    java.security.cert.CertificateFactory.getInstance("X.509");
+            FileInputStream certfis = new FileInputStream(publicCertPath);
+            java.security.cert.CertificateFactory cf = java.security.cert.CertificateFactory.getInstance("X.509");
             java.security.cert.Certificate cert = cf.generateCertificate(certfis);
             PublicKey pubKey = cert.getPublicKey();
 
             //Input the Signature Bytes
             //Input the signature bytes into a byte array named sigToVerify
-            FileInputStream sigfis = new FileInputStream(signature);
+            FileInputStream sigfis = new FileInputStream(signaturePath);
             byte[] sigToVerify = new byte[sigfis.available()];
             sigfis.read(sigToVerify);
             sigfis.close();
 
             //You can now proceed to do the verification.
-            Signature sig = Signature.getInstance("SHA1withDSA", "SUN");
+            Signature sig = Signature.getInstance("SHA1withRSA");
             sig.initVerify(pubKey);
 
             //
-            FileInputStream datafis = new FileInputStream(document);
+            FileInputStream datafis = new FileInputStream(docToSignPath);
             BufferedInputStream bufin = new BufferedInputStream(datafis);
             byte[] buffer = new byte[1024];
             int len;
@@ -118,17 +120,16 @@ public class FirmaDigital {
             boolean verifies = sig.verify(sigToVerify);
             System.out.println("signature verifies: " + verifies);
         } catch (IOException e) {
-            e.printStackTrace();
+            error = e.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
+            error = e.toString();
         } catch (InvalidKeyException e) {
-            e.printStackTrace();
+            error = e.toString();
         } catch (SignatureException e) {
-            e.printStackTrace();
+            error = e.toString();
         } catch (CertificateException e) {
-            e.printStackTrace();
+            error = e.toString();
         }
+        return error;
     }
 }

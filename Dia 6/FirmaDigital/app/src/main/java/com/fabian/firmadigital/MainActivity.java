@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Se pide permiso para escribir en la memoria externa del dispositivo
-        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, 225);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 225);
         }
 
         //Obtiene los views
@@ -78,14 +78,14 @@ public class MainActivity extends AppCompatActivity {
 
         //Verifica que el certificado exista
         File certFile = new File(downloadsPath, certFilename);
-        if(!certFile.exists()) {
+        if (!certFile.exists()) {
             mTvResult.setText("Certificado no encontrado");
             return;
         }
 
         //Verifica que exista el documento que se va a firmar
         File docToSignFile = new File(downloadsPath, docToSignFilename);
-        if(!docToSignFile.exists()) {
+        if (!docToSignFile.exists()) {
             mTvResult.setText("Documento no encontrado");
             return;
         }
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 publicCertFile.getAbsolutePath());
 
         //Muestra el resultado
-        if(error != null) {
+        if (error != null) {
             mTvResult.setText(error);
-        }else {
+        } else {
             mTvResult.setText("Documento firmado");
         }
     }
@@ -116,21 +116,46 @@ public class MainActivity extends AppCompatActivity {
      */
     public void attemptVerifySignature() {
 
-//        //Obtiene los valores
-//        String keystore = mEditCertName.getText().toString(); //Nombre del certificado
-//        char[] keystore_pass = mEditCertPass.getText().toString().toCharArray();
-//        String alias = mEditCertAlias.getText().toString();
-//        char[] alias_pass = mEditCertAliasPass.getText().toString().toCharArray();
-//        String docToSign = mEditDocToSignFilename.getText().toString();
-//        String signatureFilename = mEditSignatureFilename.getText().toString();
-//        String publicCertFilename = mEditPublicCertFilename.getText().toString();
-//
-//        //Intenta firmar el documento
-//        String error = FirmaDigital.sign(keystore, keystore_pass, alias, alias_pass, docToSign, signatureFilename, publicCertFilename);
-//        if(error != null) {
-//            mTvResult.setText(error);
-//        }else {
-//            mTvResult.setText("Documento firmado");
-//        }
+        //Obtiene los valores que ingreso el usuario
+        String docToSignFilename = mEditDocToSignFilename.getText().toString();
+        String signatureFilename = mEditSignatureFilename.getText().toString();
+        String publicCertFilename = mEditPublicCertFilename.getText().toString();
+
+        //Verifica que los archivos existan en la carpeta de downloads
+        File downloadsPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+        //Verifica que el certificado publico exista
+        File publicCertFile = new File(downloadsPath, publicCertFilename);
+        if (!publicCertFile.exists()) {
+            mTvResult.setText("Certificado publico no encontrado");
+            return;
+        }
+
+        //Verifica que exista el documento que se va a firmar
+        File docToSignFile = new File(downloadsPath, docToSignFilename);
+        if (!docToSignFile.exists()) {
+            mTvResult.setText("Documento no encontrado");
+            return;
+        }
+
+        //Verifica que la firma
+        File signatureFile = new File(downloadsPath, signatureFilename);
+        if (!signatureFile.exists()) {
+            mTvResult.setText("Firma no encontrada");
+            return;
+        }
+
+        //Intenta verificar la firma del documento
+        String error = FirmaDigital.verify(
+                publicCertFile.getAbsolutePath(),
+                signatureFile.getAbsolutePath(),
+                docToSignFile.getAbsolutePath());
+
+        //Muestra el resultado
+        if (error != null) {
+            mTvResult.setText(error);
+        } else {
+            mTvResult.setText("Documento verificado");
+        }
     }
 }

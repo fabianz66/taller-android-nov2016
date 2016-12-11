@@ -27,7 +27,7 @@
                 android:ems="10"
                 android:hint="Filename del certificado"
                 android:inputType="text"
-                android:text="fabian_store.jks" />
+                android:text="fabian_keystore.pfx" />
         </android.support.design.widget.TextInputLayout>
 
 
